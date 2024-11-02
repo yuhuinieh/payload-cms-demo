@@ -1,0 +1,35 @@
+services:
+  payload:
+    build:
+      context: . # 指定上下文為當前目錄
+      dockerfile: Dockerfile # 指定 Dockerfile 名稱（如果不是預設的 Dockerfile）
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app # 將當前目錄掛載到/app
+      - /app/node_modules # 創建匿名卷，避免node_modules問題
+    environment:
+      - PAYLOAD_SECRET=${PAYLOAD_SECRET} # 從 .env 獲取 Payload 密鑰
+      - DATABASE_URI=${POSTGRES_URI} # 從 .env 獲取資料庫連接字符串
+    working_dir: /app
+    command: sh -c "pnpm install && pnpm dev"
+    stdin_open: true # 開放標準輸入
+    tty: true # 分配虛擬終端
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: payload # 資料庫用戶
+      POSTGRES_PASSWORD: password123 # 資料庫密碼
+      POSTGRES_DB: next-payload-3 # 資料庫名稱
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - '5432:5432' # 對外端口
+
+volumes:
+  pgdata: # 用於持久化資料庫數據的卷
