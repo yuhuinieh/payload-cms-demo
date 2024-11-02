@@ -7,7 +7,6 @@ services:
       - '3000:3000'
     volumes:
       - .:/app # 將當前目錄掛載到/app
-      - /app/node_modules # 創建匿名卷，避免node_modules問題
     environment:
       - PAYLOAD_SECRET=${PAYLOAD_SECRET} # 從 .env 獲取 Payload 密鑰
       - DATABASE_URI=${POSTGRES_URI} # 從 .env 獲取資料庫連接字符串
