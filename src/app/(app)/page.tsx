@@ -11,11 +11,11 @@ const Page = async () => {
   })
 
   const data = await payload.find({
-    collection: 'pages',
+    collection: 'movies',
   })
   return (
     <>
-      <main>
+      <main className="py-5 px-5">
         <article>
           <Badge />
           <h1>Payload 3.0 - {payload?.config?.collections?.length} collections loaded</h1>{' '}
@@ -43,7 +43,7 @@ const Page = async () => {
 import config from '@payload-config'
 const payload = await getPayloadHMR({ config })
 const data = await payload.find({
-  collection: 'pages',
+  collection: 'movies',
 })
 return <Pages data={data} />
 `}
@@ -53,7 +53,7 @@ return <Pages data={data} />
         <p>This is the example in action - here is a list of all page titles:</p>
         <ul>
           {data.docs.map((doc) => (
-            <li key={doc.id}>{doc.title ?? 'No title'}</li>
+            <li key={doc.id}>{doc.name ?? 'No title'}</li>
           ))}
         </ul>
       </main>
