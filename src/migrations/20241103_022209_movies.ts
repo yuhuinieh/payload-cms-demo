@@ -22,9 +22,13 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
   );
   
-  DROP TABLE "pages";
-  ALTER TABLE "payload_locked_documents_rels" DROP CONSTRAINT "payload_locked_documents_rels_pages_fk";
-  
+  -- 刪除 "payload_locked_documents_rels" 中的約束
+    ALTER TABLE "payload_locked_documents_rels" 
+    DROP CONSTRAINT IF EXISTS "payload_locked_documents_rels_pages_fk";
+    
+  -- 刪除 "pages" 表
+  DROP TABLE IF EXISTS "pages";
+
   ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "movies_id" integer;
   DO $$ BEGIN
    ALTER TABLE "movies_generes" ADD CONSTRAINT "movies_generes_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."movies"("id") ON DELETE cascade ON UPDATE no action;
