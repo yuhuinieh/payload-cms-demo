@@ -12,7 +12,7 @@ export interface Config {
   };
   collections: {
     users: User;
-    pages: Page;
+    movies: Movie;
     media: Media;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -64,26 +64,21 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pages".
+ * via the `definition` "movies".
  */
-export interface Page {
+export interface Movie {
   id: number;
-  title?: string | null;
-  content?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
+  name: string;
+  url: string;
+  votes: number;
+  poster: number | Media;
+  overview: string;
+  tagline: string;
+  generes: {
+    name?: string | null;
+    id?: string | null;
+  }[];
+  slug?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -118,8 +113,8 @@ export interface PayloadLockedDocument {
         value: number | User;
       } | null)
     | ({
-        relationTo: 'pages';
-        value: number | Page;
+        relationTo: 'movies';
+        value: number | Movie;
       } | null)
     | ({
         relationTo: 'media';
